@@ -1,10 +1,10 @@
 """Super Mario Bros for OpenAI Gym."""
 import argparse
 import sys
-import gym
-from nes_py.wrappers import JoypadSpace
-from nes_py.app.play_human import play_human
-from nes_py.app.play_random import play_random
+import gymnasium as gym
+from nes_emulator.wrappers import JoypadSpace
+from nes_emulator.app.play_human import play_human
+from nes_emulator.app.play_random import play_random
 from ..actions import RIGHT_ONLY, SIMPLE_MOVEMENT, COMPLEX_MOVEMENT
 
 

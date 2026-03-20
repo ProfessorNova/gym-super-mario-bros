@@ -1,6 +1,6 @@
 """An OpenAI Gym environment for Super Mario Bros. and Lost Levels."""
 from collections import defaultdict
-from nes_py import NESEnv
+from nes_emulator import NESEnv
 import numpy as np
 from ._roms import decode_target
 from ._roms import rom_path
@@ -95,22 +95,22 @@ class SuperMarioBrosEnv(NESEnv):
     @property
     def _level(self):
         """Return the level of the game."""
-        return self.ram[0x075f] * 4 + self.ram[0x075c]
+        return int(self.ram[0x075f]) * 4 + int(self.ram[0x075c])
 
     @property
     def _world(self):
         """Return the current world (1 to 8)."""
-        return self.ram[0x075f] + 1
+        return int(self.ram[0x075f]) + 1
 
     @property
     def _stage(self):
         """Return the current stage (1 to 4)."""
-        return self.ram[0x075c] + 1
+        return int(self.ram[0x075c]) + 1
 
     @property
     def _area(self):
         """Return the current area number (1 to 5)."""
-        return self.ram[0x0760] + 1
+        return int(self.ram[0x0760]) + 1
 
     @property
     def _score(self):
@@ -139,7 +139,7 @@ class SuperMarioBrosEnv(NESEnv):
     def _x_position(self):
         """Return the current horizontal position."""
         # add the current page 0x6d to the current x
-        return self.ram[0x6d] * 0x100 + self.ram[0x86]
+        return int(self.ram[0x6d]) * 0x100 + int(self.ram[0x86])
 
     @property
     def _left_x_position(self):

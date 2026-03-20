@@ -1,6 +1,6 @@
 """An OpenAI Gym Super Mario Bros. environment that randomly selects levels."""
-import gym
 import numpy as np
+import gymnasium as gym
 from .smb_env import SuperMarioBrosEnv
 
 
@@ -120,53 +120,28 @@ class SuperMarioBrosRandomStagesEnv(gym.Env):
 
     def step(self, action):
         """
-        Run one frame of the NES and return the relevant observation data.
+        Take a step using the given action.
 
         Args:
-            action (byte): the bitmap determining which buttons to press
+            action (int): the discrete action to perform
 
         Returns:
-            a tuple of:
-            - state (np.ndarray): next frame as a result of the given action
-            - reward (float) : amount of reward returned after given action
-            - done (boolean): whether the episode has ended
-            - info (dict): contains auxiliary diagnostic information
+            a tuple of (observation, reward, terminated, truncated, info)
 
         """
         return self.env.step(action)
 
+    def render(self, *args, **kwargs):
+        """Render the environment."""
+        return self.env.render(*args, **kwargs)
+
     def close(self):
-        """Close the environment."""
-        # make sure the environment hasn't already been closed
-        if self.env is None:
-            raise ValueError('env has already been closed.')
-        # iterate over each list of stages
-        for stage_lists in self.envs:
-            # iterate over each stage
-            for stage in stage_lists:
-                # close the environment
-                stage.close()
-        # close the environment permanently
-        self.env = None
-        # if there is an image viewer open, delete it
+        """Close all underlying environments."""
+        for world in self.envs:
+            for env in world:
+                env.close()
         if self.viewer is not None:
             self.viewer.close()
-
-    def render(self, mode='human'):
-        """
-        Render the environment.
-
-        Args:
-            mode (str): the mode to render with:
-            - human: render to the current display
-            - rgb_array: Return an numpy.ndarray with shape (x, y, 3),
-              representing RGB values for an x-by-y pixel image
-
-        Returns:
-            a numpy array if mode is 'rgb_array', None otherwise
-
-        """
-        return SuperMarioBrosEnv.render(self, mode=mode)
 
     def get_keys_to_action(self):
         """Return the dictionary of keyboard keys to actions."""

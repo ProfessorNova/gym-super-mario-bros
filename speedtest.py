@@ -10,6 +10,7 @@ try:
             state = env.reset()
             done = False
         else:
-            state, reward, done, info = env.step(env.action_space.sample())
+            state, reward, terminated, truncated, info = env.step(env.action_space.sample())
+            done = terminated or truncated
 except KeyboardInterrupt:
     pass
